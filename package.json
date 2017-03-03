@@ -3,23 +3,25 @@
   "description": "File system utils for normalizing things like eol, encoding and BOM.",
   "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/file-normalize",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/file-normalize.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/file-normalize",
   "bugs": {
     "url": "https://github.com/jonschlinkert/file-normalize/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/jonschlinkert/file-normalize/blob/master/LICENSE-MIT"
-    }
+  "license": "MIT",
+  "files": [
+    "index.js"
   ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  },
   "keywords": [
     "bom",
     "byte",
@@ -33,18 +35,5 @@
     "path",
     "string",
     "utf8"
-  ],
-  "main": "index.js",
-  "engines": {
-    "node": ">=0.10.0"
-  },
-  "scripts": {
-    "test": "mocha -R spec"
-  },
-  "devDependencies": {
-    "verb": "~0.2.6",
-    "chai": "~1.9.1",
-    "mocha": "*",
-    "verb-tag-jscomments": "^0.1.0"
-  }
+  ]
 }

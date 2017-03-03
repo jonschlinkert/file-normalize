@@ -1,8 +1,8 @@
-/**
- * file-normalize <https://github.com/assemble/file-normalize>
+/*!
+ * file-normalize <https://github.com/jonschlinkert/file-normalize>
  *
- * Copyright (c) 2014 Jon Schlinkert, Brian Woodward, contributors.
- * Licensed under the MIT license.
+ * Copyright (c) 2014, 2017, Jon Schlinkert.
+ * Released under the MIT License.
  */
 'use strict';
 
