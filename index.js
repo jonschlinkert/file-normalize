@@ -7,109 +7,88 @@
 'use strict';
 
 var os = require('os');
-var file = module.exports = {};
-
-
-/**
- * ## .pathSepRegex
- *
- * Normalize paths to use `/`
- *
- * @type  {RegExp}
- * @return {N/A}
- */
-
-file.pathSepRegex = /[\/\\]/g;
-file.normalizeSlash = function(str) {
-  return str.replace(file.pathSepRegex, '/');
-};
+var normalize = require('normalize-path');
+var stripBOM = require('strip-bom-string');
+var file = module.exports;
 
 /**
- * ## .normalizeEOL( str )
- *
- * Normalize line endings to use the defaults of the current operating system.
- *
- * @param   {String} `str`
- * @return  {String}
- */
-
-file.normalizeEOL = function(str) {
-  return str.replace(/\r\n|\n/g, os.EOL);
-};
-
-/**
- * ## .normalizeNL( str )
- *
- * Normalize all line endings to newlines, `\n`.
- *
- * ```js
- * var file = require('read-file');
- * var str = file.readFileSync('foo.txt');
- * file.normalizeNL(str);
- * ```
- *
- * @param   {String} `str`
- * @return  {String}
- */
-
-file.normalizeNL = function(str) {
-  return str.replace(/\r\n|\n/g, '\n');
-};
-
-/**
- * ## .encoding( encoding )
- *
- * Encoding to use. Default is `utf8`.
- *
- * @param   {String} `encoding`
- * @return  {String}
- */
-
-file.encoding = function(encoding) {
-  return encoding || 'utf8';
-};
-
-/**
- * ## .preserveBOM
- *
- * Preserve byte order marks. Default is `false`.
- *
- * **Example:**
+ * Normalize slashes in the given filepath to forward slashes.
+ * Note that this is a simple replacement of `\\` with `/`, and
+ * this method does not check for URL or windows drive characters.
  *
  * ```js
  * var file = require('file-normalize');
- * file.preserveBOM = true;
+ * console.log(file.normalizeSlash('foo\\bar'));
+ * //=> 'foo/bar'
  * ```
- *
- * @return  {N/A}
+ * @param {String} `filepath`
+ * @return {String}
  */
 
-file.preserveBOM = false;
+file.normalizeSlash = function(filepath, trailingSlash) {
+  if (typeof filepath !== 'string') {
+    throw new TypeError('expected filepath to be a string');
+  }
+  return normalize(filepath, trailingSlash);
+};
 
 /**
- * ## .stripBOM( str )
- *
- * Strip byte order marks.
- *
- * **Example:**
+ * Normalize line endings to use the given `eol` character,
+ * or the defaults of the current operating system.
  *
  * ```js
- * var file = require('read-file');
- * var str = file.readFileSync('foo.txt');
- * file.stripBOM(str);
+ * var fs = require('fs');
+ * var file = require('file-normalize');
+ * var str = fs.readFileSync('foo.txt', 'utf8');
+ * console.log(file.normalizeEOL(str));
  * ```
+ * @param {String} `str`
+ * @return {String}
+ */
+
+file.normalizeEOL = function(str, eol) {
+  if (typeof str !== 'string') {
+    throw new TypeError('expected a string');
+  }
+  return str.replace(/(?:\r\n?|\n)/g, eol || os.EOL);
+};
+
+/**
+ * Normalize all line endings to unix newlines (strips carriage returns).
  *
- * @param   {String} `str`
- * @return  {String}
+ * ```js
+ * var fs = require('fs');
+ * var file = require('file-normalize');
+ * var str = fs.readFileSync('foo.txt', 'utf8');
+ * console.log(file.normalizeNL(str));
+ * ```
+ * @param {String} `str`
+ * @return {String}
+ */
+
+file.normalizeNL = function(str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('expected a string');
+  }
+  return file.normalizeEOL(str, '\n');
+};
+
+/**
+ * Strip byte-order marks.
+ *
+ * ```js
+ * var fs = require('fs');
+ * var file = require('file-normalize');
+ * var str = file.readFileSync('foo.txt', 'utf8');
+ * console.log(file.stripBOM(str));
+ * ```
+ * @param {String} `str`
+ * @return {String}
  */
 
 file.stripBOM = function(str) {
-  // Transform EOL
-  var contents = (os.EOL === '\n') ? str : str.replace(os.EOL, '\n');
-  // Strip UTF BOM
-  if (!file.preserveBOM && contents.charCodeAt(0) === 0xFEFF) {
-    contents = contents.substring(1);
-    contents = contents.replace(/^\uFEFF/, '');
+  if (typeof str !== 'string') {
+    throw new TypeError('expected a string');
   }
-  return contents;
+  return stripBOM(str);
 };
