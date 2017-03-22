@@ -23,6 +23,7 @@ var file = module.exports;
  * ```
  * @param {String} `filepath`
  * @return {String}
+ * @api public
  */
 
 file.normalizeSlash = function(filepath, trailingSlash) {
@@ -44,6 +45,7 @@ file.normalizeSlash = function(filepath, trailingSlash) {
  * ```
  * @param {String} `str`
  * @return {String}
+ * @api public
  */
 
 file.normalizeEOL = function(str, eol) {
@@ -64,6 +66,7 @@ file.normalizeEOL = function(str, eol) {
  * ```
  * @param {String} `str`
  * @return {String}
+ * @api public
  */
 
 file.normalizeNL = function(str) {
@@ -84,6 +87,7 @@ file.normalizeNL = function(str) {
  * ```
  * @param {String} `str`
  * @return {String}
+ * @api public
  */
 
 file.stripBOM = function(str) {
