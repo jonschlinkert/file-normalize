@@ -7,9 +7,13 @@
 'use strict';
 
 var os = require('os');
+var equals = require('buffer-equal');
 var normalize = require('normalize-path');
 var stripBOM = require('strip-bom-string');
 var file = module.exports;
+
+file.cr = new Buffer('\r\n');
+file.nl = new Buffer('\n');
 
 /**
  * Normalize slashes in the given filepath to forward slashes.
@@ -95,4 +99,105 @@ file.stripBOM = function(str) {
     throw new TypeError('expected a string');
   }
   return stripBOM(str);
+};
+
+/**
+ * Append a string or buffer to another string or buffer ensuring to preserve line ending characters.
+ *
+ * ```js
+ * console.log([append(new Buffer('abc\r\n'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\r\ndef\r\n' ]
+ *
+ * console.log([append(new Buffer('abc\n'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\ndef\n' ]
+ *
+ * // uses os.EOL when a line ending is not found
+ * console.log([append(new Buffer('abc'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\ndef' ]
+ *
+ * console.log([append('abc\r\n', 'def')]);
+ * //=> [ 'abc\r\ndef\r\n' ]
+ *
+ * console.log([append('abc\n', 'def')]);
+ * //=> [ 'abc\ndef\n' ]
+ *
+ * // uses os.EOL when a line ending is not found
+ * console.log([append('abc', 'def')]);
+ * //=> [ 'abc\ndef' ]
+ * ```
+ * @param  {String|Buffer} `prefix` String or Buffer that will be used to check for an existing line ending. The suffix is appended to this.
+ * @param  {String|Buffer} `suffix` String or Buffer that will be appended to the prefix.
+ * @return {String|Buffer} Final String or Buffer
+ * @api public
+ */
+
+file.append = function(prefix, suffix) {
+  if (Buffer.isBuffer(prefix)) {
+    return file.appendBuffer(prefix, suffix);
+  }
+  return file.appendString(prefix, suffix);
+};
+
+/**
+ * Append a string to another string ensuring to preserve line ending characters.
+ *
+ * ```js
+ * console.log([appendString('abc\r\n', 'def')]);
+ * //=> [ 'abc\r\ndef\r\n' ]
+ *
+ * console.log([appendString('abc\n', 'def')]);
+ * //=> [ 'abc\ndef\n' ]
+ *
+ * // uses os.EOL when a line ending is not found
+ * console.log([appendString('abc', 'def')]);
+ * //=> [ 'abc\ndef' ]
+ * ```
+ * @param  {String} `str` String that will be used to check for an existing line ending. The suffix is appended to this.
+ * @param  {String} `suffix` String that will be appended to the str.
+ * @return {String} Final String
+ * @api public
+ */
+
+file.appendString = function(str, suffix) {
+  var eol;
+  if (str.slice(-2) === '\r\n') {
+    eol = '\r\n';
+  } else if (str.slice(-1) === '\n') {
+    eol = '\n';
+  } else {
+    return [str, os.EOL, suffix].join('');
+  }
+  return [str, suffix, eol].join('');
+};
+
+/**
+ * Append a buffer to another buffer ensuring to preserve line ending characters.
+ *
+ * ```js
+ * console.log([appendBuffer(new Buffer('abc\r\n'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\r\ndef\r\n' ]
+ *
+ * console.log([appendBuffer(new Buffer('abc\n'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\ndef\n' ]
+ *
+ * // uses os.EOL when a line ending is not found
+ * console.log([appendBuffer(new Buffer('abc'), new Buffer('def')).toString()]);
+ * //=> [ 'abc\ndef' ]
+ * * ```
+ * @param  {Buffer} `buf` Buffer that will be used to check for an existing line ending. The suffix is appended to this.
+ * @param  {Buffer} `suffix` Buffer that will be appended to the buf.
+ * @return {Buffer} Final Buffer
+ * @api public
+ */
+
+file.appendBuffer = function(buf, suffix) {
+  var eol;
+  if (equals(buf.slice(-2), file.cr)) {
+    eol = file.cr;
+  } else if (equals(buf.slice(-1), file.nl)) {
+    eol = file.nl;
+  } else {
+    return Buffer.concat([buf, new Buffer(os.EOL), new Buffer(suffix)]);
+  }
+  return Buffer.concat([buf, new Buffer(suffix), eol]);
 };

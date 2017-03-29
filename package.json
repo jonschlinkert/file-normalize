@@ -20,6 +20,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "buffer-equal": "^1.0.0",
     "normalize-path": "^2.0.1",
     "strip-bom-string": "^0.1.2"
   },
