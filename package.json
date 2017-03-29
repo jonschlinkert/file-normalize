@@ -1,7 +1,7 @@
 {
   "name": "file-normalize",
   "description": "File system utils for normalizing things like eol, encoding and BOM.",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/jonschlinkert/file-normalize",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/file-normalize",
