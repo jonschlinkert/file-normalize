@@ -24,10 +24,10 @@ describe('file-normalize', function() {
   });
 
   it('should normalize EOL to unix newlines', function() {
-    assert.equal(file.normalizeEOL('foo\r\nbar'), 'foo\nbar');
-    assert.equal(file.normalizeEOL('foo\r\n\r\nbar'), 'foo\n\nbar');
-    assert.equal(file.normalizeEOL('foo\rbar'), 'foo\nbar');
-    assert.equal(file.normalizeEOL('foo\nbar'), 'foo\nbar');
+    assert.equal(file.normalizeEOL('foo\r\nbar', '\n'), 'foo\nbar');
+    assert.equal(file.normalizeEOL('foo\r\n\r\nbar', '\n'), 'foo\n\nbar');
+    assert.equal(file.normalizeEOL('foo\rbar', '\n'), 'foo\nbar');
+    assert.equal(file.normalizeEOL('foo\nbar', '\n'), 'foo\nbar');
   });
 
   it('should strip byte-order marks', function() {
