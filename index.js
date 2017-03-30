@@ -7,9 +7,11 @@
 'use strict';
 
 var os = require('os');
+var isBuffer = require('is-buffer');
 var equals = require('buffer-equal');
 var normalize = require('normalize-path');
-var stripBOM = require('strip-bom-string');
+var stripBomBuffer = require('strip-bom-buffer');
+var stripBomString = require('strip-bom-string');
 var file = module.exports;
 
 file.cr = new Buffer('\r\n');
@@ -89,16 +91,19 @@ file.normalizeNL = function(str) {
  * var str = file.readFileSync('foo.txt', 'utf8');
  * console.log(file.stripBOM(str));
  * ```
- * @param {String} `str`
+ * @param {String|Buffer} `val`
  * @return {String}
  * @api public
  */
 
-file.stripBOM = function(str) {
-  if (typeof str !== 'string') {
-    throw new TypeError('expected a string');
+file.stripBOM = function(val) {
+  if (isBuffer(val)) {
+    return stripBomBuffer(val);
   }
-  return stripBOM(str);
+  if (typeof val !== 'string') {
+    throw new TypeError('expected a string or buffer');
+  }
+  return stripBomString(val);
 };
 
 /**
@@ -132,7 +137,7 @@ file.stripBOM = function(str) {
  */
 
 file.append = function(prefix, suffix) {
-  if (Buffer.isBuffer(prefix)) {
+  if (isBuffer(prefix)) {
     return file.appendBuffer(prefix, suffix);
   }
   return file.appendString(prefix, suffix);

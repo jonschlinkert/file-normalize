@@ -4,6 +4,10 @@
   "version": "1.0.0",
   "homepage": "https://github.com/jonschlinkert/file-normalize",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "contributors": [
+    "Brian Woodward <brian.woodward@gmail.com> (https://twitter.com/doowb)",
+    "Jon Schlinkert <jon.schlinkert@sellside.com> (http://twitter.com/jonschlinkert)"
+  ],
   "repository": "jonschlinkert/file-normalize",
   "bugs": {
     "url": "https://github.com/jonschlinkert/file-normalize/issues"
@@ -21,8 +25,10 @@
   },
   "dependencies": {
     "buffer-equal": "^1.0.0",
-    "normalize-path": "^2.0.1",
-    "strip-bom-string": "^0.1.2"
+    "is-buffer": "^1.1.5",
+    "normalize-path": "^2.1.1",
+    "strip-bom-buffer": "^1.0.0",
+    "strip-bom-string": "^1.0.0"
   },
   "devDependencies": {
     "gulp-format-md": "^0.1.11",
