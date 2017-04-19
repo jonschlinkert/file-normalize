@@ -164,6 +164,9 @@ file.append = function(prefix, suffix) {
  */
 
 file.appendString = function(str, suffix) {
+  if (!suffix || !suffix.length) {
+    return str;
+  }
   var eol;
   if (str.slice(-2) === '\r\n') {
     eol = '\r\n';
@@ -196,6 +199,9 @@ file.appendString = function(str, suffix) {
  */
 
 file.appendBuffer = function(buf, suffix) {
+  if (!suffix || !suffix.length) {
+    return buf;
+  }
   var eol;
   if (equals(buf.slice(-2), file.cr)) {
     eol = file.cr;

@@ -58,6 +58,18 @@ describe('file-normalize', function() {
     it('should append the string suffix to the buffer prefix without EOL', function() {
       assert.deepEqual(file.appendBuffer(new Buffer('abc'), 'def'), new Buffer('abc' + os.EOL + 'def'));
     });
+
+    it('should not append EOL when suffix is empty', function() {
+      assert.deepEqual(file.appendBuffer(new Buffer('abc'), new Buffer('')), new Buffer('abc'));
+    });
+
+    it('should not append EOL when suffix is undefined', function() {
+      assert.deepEqual(file.appendBuffer(new Buffer('abc')), new Buffer('abc'));
+    });
+
+    it('should not append EOL when suffix is empty string', function() {
+      assert.deepEqual(file.appendBuffer(new Buffer('abc'), ''), new Buffer('abc'));
+    });
   });
 
   describe('appendString', function() {
@@ -83,6 +95,18 @@ describe('file-normalize', function() {
 
     it('should append the buffer suffix to the string prefix without EOL', function() {
       assert.equal(file.appendString('abc', new Buffer('def')), 'abc' + os.EOL + 'def');
+    });
+
+    it('should not append EOL when suffix is empty', function() {
+      assert.deepEqual(file.appendBuffer('abc', ''), 'abc');
+    });
+
+    it('should not append EOL when suffix is undefined', function() {
+      assert.deepEqual(file.appendBuffer('abc'), 'abc');
+    });
+
+    it('should not append EOL when suffix is empty buffer', function() {
+      assert.deepEqual(file.appendBuffer('abc', new Buffer('')), 'abc');
     });
   });
 
