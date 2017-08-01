@@ -10,7 +10,7 @@ var os = require('os');
 var isBuffer = require('is-buffer');
 var equals = require('buffer-equal');
 var normalize = require('normalize-path');
-var stripBomBuffer = require('strip-bom-buffer');
+var removeBomBuffer = require('remove-bom-buffer');
 var stripBomString = require('strip-bom-string');
 var file = module.exports;
 
@@ -98,7 +98,7 @@ file.normalizeNL = function(str) {
 
 file.stripBOM = function(val) {
   if (isBuffer(val)) {
-    return stripBomBuffer(val);
+    return removeBomBuffer(val);
   }
   if (typeof val !== 'string') {
     throw new TypeError('expected a string or buffer');

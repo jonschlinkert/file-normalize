@@ -28,7 +28,7 @@
     "buffer-equal": "^1.0.0",
     "is-buffer": "^1.1.5",
     "normalize-path": "^2.1.1",
-    "strip-bom-buffer": "^1.0.0",
+    "remove-bom-buffer": "^3.0.0",
     "strip-bom-string": "^1.0.0"
   },
   "devDependencies": {
