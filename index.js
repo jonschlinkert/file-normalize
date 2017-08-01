@@ -10,8 +10,10 @@ var os = require('os');
 var isBuffer = require('is-buffer');
 var equals = require('buffer-equal');
 var normalize = require('normalize-path');
-var removeBomBuffer = require('remove-bom-buffer');
+var appendString = require('append-string');
+var appendBuffer = require('append-buffer');
 var stripBomString = require('strip-bom-string');
+var removeBomBuffer = require('remove-bom-buffer');
 var file = module.exports;
 
 file.cr = new Buffer('\r\n');
@@ -163,20 +165,7 @@ file.append = function(prefix, suffix) {
  * @api public
  */
 
-file.appendString = function(str, suffix) {
-  if (!suffix || !suffix.length) {
-    return str;
-  }
-  var eol;
-  if (str.slice(-2) === '\r\n') {
-    eol = '\r\n';
-  } else if (str.slice(-1) === '\n') {
-    eol = '\n';
-  } else {
-    return [str, os.EOL, suffix].join('');
-  }
-  return [str, suffix, eol].join('');
-};
+file.appendString = appendString;
 
 /**
  * Append a buffer to another buffer ensuring to preserve line ending characters.
@@ -198,17 +187,4 @@ file.appendString = function(str, suffix) {
  * @api public
  */
 
-file.appendBuffer = function(buf, suffix) {
-  if (!suffix || !suffix.length) {
-    return buf;
-  }
-  var eol;
-  if (equals(buf.slice(-2), file.cr)) {
-    eol = file.cr;
-  } else if (equals(buf.slice(-1), file.nl)) {
-    eol = file.nl;
-  } else {
-    return Buffer.concat([buf, new Buffer(os.EOL), new Buffer(suffix)]);
-  }
-  return Buffer.concat([buf, new Buffer(suffix), eol]);
-};
+file.appendBuffer = appendBuffer;
